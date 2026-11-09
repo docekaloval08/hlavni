@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -12,6 +13,8 @@ namespace hlavni
 {
     public partial class Form1 : Form
     {
+        private int[,] hernipole = new int[10, 10];
+
         public Form1()
         {
             InitializeComponent();
@@ -68,10 +71,110 @@ namespace hlavni
             tlacitko.Enabled = false;
         }
 
-        private void Lode(object sender, EventArgs e)
+        private void Lode()
         {
 
         }
 
+        private void RozmisteniFlotily() //náhodně
+        {
+            Random rnd = new Random();
+            int[] velikostlodi = { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 };
+
+            foreach (int delka in velikostlodi)
+            {
+                bool umistena = false;
+                while (!umistena)
+                {
+                    int radek;
+                    int sloupec;
+                    int smer = rnd.Next(2);
+                    bool volno = true;
+
+                    if (smer == 0) //horizontálně
+                    {
+                        radek = rnd.Next(10);
+                        sloupec = rnd.Next(10 - delka + 1);
+
+                        for (int i = 0; i < delka; i++)
+                        {
+                            int aktradek = radek;
+                            int aktsloupec = sloupec + i;
+
+                            for (int j = 0; j <= 2; j++)
+                            {
+                                for (int k = 0; k <= 2; k++)
+                                {
+                                    int kontradek = aktradek + j;
+                                    int kontsloupec = sloupec + k;
+
+                                    if (kontradek >= 0 && kontradek < 10 && kontsloupec >= 0 && kontsloupec < 10)
+                                    {
+                                        if (hernipole[kontradek, kontsloupec] != 0)
+                                        {
+                                            volno = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!volno) break;
+                            }
+                            if (!volno) break;
+
+                        }
+
+                        if (volno)
+                        {
+                            for (int i = 0; i < delka; i++)
+                            {
+                                hernipole[radek, sloupec + i] = delka;
+                            }
+                            umistena = true;
+                        }
+                    }
+                    else //vertikálně
+                    {
+                        radek = rnd.Next(10 - delka + 1);
+                        sloupec = rnd.Next(10);
+
+                        for (int i = 0; i < delka; i++)
+                        {
+                            int aktradek = radek + i;
+                            int aktsloupec = sloupec;
+
+                            for (int j = 0; j <= 2; j++)
+                            {
+                                for (int k = 0; k <= 2; k++)
+                                {
+                                    int kontradek = aktradek + j;
+                                    int kontsloupec = sloupec + k;
+
+                                    if (kontradek >= 0 && kontradek < 10 && kontsloupec >= 0 && kontsloupec < 10)
+                                    {
+                                        if (hernipole[kontradek, kontsloupec] != 0)
+                                        {
+                                            volno = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!volno) break;
+                            }
+                            if (!volno) break;
+
+                        }
+
+                        if (volno)
+                        {
+                            for (int i = 0; i < delka; i++)
+                            {
+                                hernipole[radek + i, sloupec] = delka;
+                            }
+                            umistena = true;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
