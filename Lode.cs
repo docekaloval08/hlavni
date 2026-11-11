@@ -8,10 +8,16 @@ namespace hlavni
 {
     internal class Lode
     {
-        public Lode() {
-            
+        public int Delka { get; set; }
+        public Lode(int delka) 
+        {
+            Delka = delka;
         }
 
+        //public bool JePotopena()
+        //{
+        //
+        //}
         
     }
 }
